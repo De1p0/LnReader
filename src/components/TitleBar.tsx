@@ -21,7 +21,6 @@ export default function TitleBar() {
      }, [appWindow]);
 
      const btnClass = "inline-flex items-center justify-center w-11 h-full transition-all duration-200 text-gray-400 hover:text-white hover:bg-white/10";
-     const closeBtnClass = "inline-flex items-center justify-center w-11 h-full transition-all duration-200 text-gray-400 hover:text-white hover:bg-red-500/90";
 
      return (
           <header
@@ -62,7 +61,7 @@ export default function TitleBar() {
                          {isMaximized ? <Square2StackIcon className="w-4.5 h-4.5" /> : <StopIcon className="w-4.5 h-4.5" />}
                     </button>
 
-                    <button onClick={() => appWindow.close()} className={closeBtnClass} title="Close">
+                    <button onClick={() => appWindow.close()} className="inline-flex items-center justify-center w-11 h-full transition-all duration-200 text-gray-400 hover:text-white hover:bg-red-500/90" title="Close">
                          <XMarkIcon className="w-4.5 h-4.5" />
                     </button>
                </div>

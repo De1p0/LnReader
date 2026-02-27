@@ -25,7 +25,9 @@ export default function Sidebar() {
         <aside
             ref={sidebarRef}
             className={`h-full p-2 pt-0 text-copy overflow-hidden transition-all duration-300 ease-in-out bg-surface
-              ${isExpanded ? "w-64 z-40" : "w-13 z-20 "} absolute left-0 top-0`} // for some reason backdrop doesnt work here no clue why plus im sleep deprived rn
+              ${isExpanded ? "w-64 z-40 bg-surface/90 backdrop-blur-md" : "w-13 z-20 "} absolute left-0 top-0`} // for some reason backdrop doesnt work here no clue why plus im sleep deprived rn
+            // ok i found out why backdroip doesnt work -> its cause webkitgtk is fucking stupid and doesnt work
+
             onBlur={(e) => {
                 // Check if the new focus target is outside the sidebar
                 if (!e.currentTarget.contains(e.relatedTarget as Node)) {

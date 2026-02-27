@@ -15,9 +15,7 @@
         "title": "lnreader",
         "width": 800,
         "height": 600,
-        "decorations": false,
-        "shadow": true,
-        "transparent": true
+        "decorations": false
       }
     ],
     "security": {

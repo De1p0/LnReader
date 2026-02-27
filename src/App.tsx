@@ -7,7 +7,7 @@ import AppRoutes from "./routes/AppRoutes";
 function App() {
   return (
 
-    <div className="w-screen h-screen flex flex-row overflow-hidden relative">
+    <div className="w-screen h-screen flex flex-row overflow-hidden relative bg-surface">
       <Sidebar />
 
 

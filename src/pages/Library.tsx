@@ -62,7 +62,7 @@ export default function Library() {
             {library.map((book, index) => (
                 <div key={index} className="relative aspect-2/3 max-w-50 max-h-70 w-full rounded-2xl overflow-hidden shadow-lg ">
                     <img src={book.imageSrc} className="w-full h-full object-cover" alt={book.name} />
-                    <span className="absolute bottom-0 left-0 w-full p-4 text-white font-black bg-linear-to-t from-black/90 to-transparent">
+                    <span className="absolute bottom-0 left-0 w-full p-4 text-white font-black bg-linear-to-t from-black/70 to-transparent">
                         {book.name}
                     </span>
                 </div>
