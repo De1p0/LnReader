@@ -22,11 +22,12 @@ export interface Chapter {
     dateUpload: string;
 }
 
-export interface MangaSummary {
+export interface Manga {
     name: string;
     imageUrl: string;
     link: string;
 }
+
 
 export interface MangaDetail {
     author: string;
@@ -107,15 +108,15 @@ export declare class DefaultExtension {
 
     fetchUrl(url: string): Promise<any>;
     getHeaders(url: string): Record<string, string>;
-    getPopular(page: number): Promise<{ list: MangaSummary[]; hasNextPage: boolean }>;
-    getLatestUpdates(page: number): Promise<{ list: MangaSummary[]; hasNextPage: boolean }>;
-    search(query: string, page: number, filters: Filter[]): Promise<{ list: MangaSummary[]; hasNextPage: boolean }>;
+    getPopular(page: number): Promise<{ list: Manga[]; hasNextPage: boolean }>;
+    getLatestUpdates(page: number): Promise<{ list: Manga[]; hasNextPage: boolean }>;
+    search(query: string, page: number, filters: Filter[]): Promise<{ list: Manga[]; hasNextPage: boolean }>;
     getDetail(url: string): Promise<MangaDetail>;
     fetchPaginatedChapters(mangaId: string, lang: string): Promise<Chapter[]>;
     extractChapters(paginatedData: any): Chapter[];
     getPageList(url: string): Promise<string[]>;
     getFilterList(): Filter[];
-    mangaRes(res: string): { list: MangaSummary[]; hasNextPage: boolean };
+    mangaRes(res: string): { list: Manga[]; hasNextPage: boolean };
     findTitle(data: any, lang: string): string;
     getCover(data: any): string;
     preferenceOriginalLanguages(): string;

@@ -8,24 +8,24 @@ export default function Library() {
     const [filter, setFilter] = useState("All")
 
     let library = [
-    //     {
-    //     name: "The Fragrant Flower Blooms with Dignity",
-    //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/Kaoru_Hana_wa_Rin_to_Saku_volume_1_cover.jpg/250px-Kaoru_Hana_wa_Rin_to_Saku_volume_1_cover.jpg",
-    //     currentChapter: 12,
-    //     maximumChapters: 333,
-    // }, {
-    //     name: "Ruri Dragon",
-    //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/2/24/RuriDragon_vol._1_cover.jpg",
-    //     currentChapter: 12,
-    //     maximumChapters: 12,
-    // }, {
-    //     name: "Kimi wa Yotsuba no Clover",
-    //     imageSrc: "https://jpbookstore.com/cdn/shop/files/81NCqrHV51L._SL1500_1024x1024.jpg?v=1752505281",
-    //     currentChapter: 12,
-    //     maximumChapters: 333,
-    // }
-]
-    ;
+        //     {
+        //     name: "The Fragrant Flower Blooms with Dignity",
+        //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/Kaoru_Hana_wa_Rin_to_Saku_volume_1_cover.jpg/250px-Kaoru_Hana_wa_Rin_to_Saku_volume_1_cover.jpg",
+        //     currentChapter: 12,
+        //     maximumChapters: 333,
+        // }, {
+        //     name: "Ruri Dragon",
+        //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/2/24/RuriDragon_vol._1_cover.jpg",
+        //     currentChapter: 12,
+        //     maximumChapters: 12,
+        // }, {
+        //     name: "Kimi wa Yotsuba no Clover",
+        //     imageSrc: "https://jpbookstore.com/cdn/shop/files/81NCqrHV51L._SL1500_1024x1024.jpg?v=1752505281",
+        //     currentChapter: 12,
+        //     maximumChapters: 333,
+        // }                        
+    ]
+        ;
 
     return (
         <div className="w-full h-full p-8">

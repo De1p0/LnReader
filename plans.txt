@@ -1,0 +1,13 @@
+High priority --
+
+Implement a complete source system - Likely aidoku or mangayomi sources
+Allow saving manga
+Implementing an actual reader
+More settings 
+Catagories
+
+Low priority --
+
+Implement a theming system
+Downloading manga
+Importing local manga

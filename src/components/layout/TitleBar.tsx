@@ -5,39 +5,34 @@ import {
      Square2StackIcon,
      StopIcon,
      XMarkIcon,
-     MagnifyingGlassIcon,
-     ChevronDownIcon
+     MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import { useConfigStore } from '../../stores/configStore';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
      const appWindow = useMemo(() => getCurrentWindow(), []);
-     const [query, setQuery] = useState("")
-     const { config, setConfig } = useConfigStore();
+     const [query, setQuery] = useState("");
+     const { setSearch } = useConfigStore();
      const navigate = useNavigate();
 
-
-
-     
      async function handleSearch() {
           if (!query.trim()) return;
 
-          let results: any = []; // holy FUCK im sleep deprived i cant do this no more idc if im using the any type now
-                    // results of the FUCKING SEARCH DFGSHIUGDFOIUH 
+          let results: any[] = [];
 
+          const { config } = useConfigStore.getState();
           for (const source of config.installedSources) {
                const res = await source.search(query, 1, []);
                if (res?.list) {
-                      results = [...results, ...res.list];
+                    results = [...results, ...res.list];
                }
           }
 
-          navigate("/search", { state: { results, query } });
-          
+          setSearch(results, query);
 
+          navigate("/search");
      }
 
      useEffect(() => {
@@ -54,8 +49,6 @@ export default function TitleBar() {
                data-tauri-drag-region
                className="titlebar flex flex-row items-center w-full h-9 bg-[#0f172a] select-none"
           >
-
-
                <div className="flex items-center h-full">
                     <div className="flex items-center gap-2 px-3 select-none pointer-events-none">
                          <svg width="18" height="18" viewBox="0 0 200 200" className="opacity-90">
@@ -66,6 +59,7 @@ export default function TitleBar() {
                          <span className="text-[10px] font-black tracking-[0.2em] uppercase text-primary-text">Urayomi</span>
                     </div>
                </div>
+
                <div className="flex-1 flex"></div>
 
                <div className="w-full max-w-md px-4">
@@ -75,23 +69,18 @@ export default function TitleBar() {
                          </div>
                          <input
                               type="text"
+                              value={query}
                               onChange={(e) => setQuery(e.target.value)}
-                              onKeyDown={(e) => {
-                                   if (e.key === "Enter") {
-                                        handleSearch();
-                                   }
-                              }}
+                              onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
                               placeholder="Search manga..."
                               className="w-full bg-background border border-white/5 text-xs text-primary-text rounded py-1 pl-7 pr-2 focus:outline-none focus:bg-background/90 focus:border-accent/90 transition-all"
                          />
                     </div>
                </div>
 
-
                <div className="flex-1 flex"></div>
 
                <div className="flex h-full">
-
                     <button onClick={() => appWindow.minimize()} className={btnClass} title="Minimize">
                          <MinusIcon className="w-4.5 h-4.5" />
                     </button>

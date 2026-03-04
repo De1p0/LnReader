@@ -1,18 +1,24 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { DefaultExtension, SourceResponse } from '../types/ExtensionData';
+import { DefaultExtension, SourceResponse, Manga } from '../types/ExtensionData';
 
 export interface AppConfig {
     theme: 'system' | 'light' | 'dark';
-    sources: SourceResponse[],
-    sourceList: string,
-    installedSourcesName: SourceResponse[],
-    installedSources: DefaultExtension[],
+    sources: SourceResponse[];
+    sourceList: string;
+    installedSourcesName: SourceResponse[];
+    installedSources: DefaultExtension[];
+
+    // Search state
+    searchResults: Manga[];
+    searchQuery: string;
 }
 
 interface ConfigStore {
     config: AppConfig;
     setConfig: <K extends keyof AppConfig>(key: K, value: AppConfig[K]) => void;
+    setSearch: (results: Manga[], query: string) => void;
+    clearSearch: () => void;
 }
 
 export const useConfigStore = create<ConfigStore>()(
@@ -24,9 +30,10 @@ export const useConfigStore = create<ConfigStore>()(
                 sourceList: "",
                 installedSources: [],
                 installedSourcesName: [],
+                searchResults: [],
+                searchQuery: "",
             },
             setConfig: (key, value) => {
-                console.log(value)
                 set((state) => ({
                     config: { ...state.config, [key]: value },
                 }));
@@ -35,10 +42,18 @@ export const useConfigStore = create<ConfigStore>()(
                     applyTheme(value as AppConfig['theme']);
                 }
             },
+            setSearch: (results, query) => {
+                set((state) => ({
+                    config: { ...state.config, searchResults: results, searchQuery: query },
+                }));
+            },
+            clearSearch: () => {
+                set((state) => ({
+                    config: { ...state.config, searchResults: [], searchQuery: "" },
+                }));
+            },
         }),
-        {
-            name: 'urayomi-settings',
-        }
+        { name: 'urayomi-settings' }
     )
 );
 

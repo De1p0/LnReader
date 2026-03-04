@@ -26,7 +26,7 @@ function App() {
 
         <TitleBar />
 
-        <main className="flex-1 bg-background rounded-tl-2xl text-black">
+        <main className="flex-1 bg-background rounded-tl-2xl text-black overflow-scroll scrollbar-hide">
           {/* this is for SPA, redirecting to pages ruins UX */}
           <AppRoutes />
         </main>
