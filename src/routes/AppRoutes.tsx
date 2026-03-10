@@ -6,40 +6,52 @@ import Search from "../pages/Search";
 import Settings from "../pages/Settings";
 import { useConfigStore } from "../stores/configStore";
 
+const pageRegistry: Record<
+    string,
+    {
+        default: React.ReactNode;
+        routeOverrides?: { pattern: RegExp; component: React.ReactNode }[];
+    }
+> = {
+    library: {
+        default: <Library />,
+        routeOverrides: [
+            { pattern: /\/books\//, component: <BookDetailsPage /> },
+        ],
+    },
+    search: {
+        default: <Search />,
+        routeOverrides: [
+            { pattern: /\/books\//, component: <BookDetailsPage /> },
+        ],
+    },
+    browse: { default: <Browse /> },
+    settings: { default: <Settings /> },
+};
+
+const getPageComponent = (pageKey: string, route?: string) => {
+    const pageConfig = pageRegistry[pageKey];
+
+    if (!pageConfig) return <Library />;
+
+    if (route && pageConfig.routeOverrides) {
+        for (const override of pageConfig.routeOverrides) {
+            if (override.pattern.test(route)) {
+                return override.component;
+            }
+        }
+    }
+
+    return pageConfig.default;
+};
+
 export default function AnimatedRoutes() {
     const config = useConfigStore((state) => state.config);
 
-    const renderContent = (
-        DefaultComponent: React.ComponentType
-    ): React.ReactNode => {
-        console.log(config.currentPage, config.pageRoutes)
-
-
-        if (config.pageRoutes[config.currentPage]?.route?.includes('/books/')) {
-            return <BookDetailsPage />;
-        }
-        return <DefaultComponent />;
-    };
-
-
-
-    return (
-        <div className="relative w-full h-full">
-            <div className={config.currentPage === 'library' ? 'block h-full' : 'hidden'}>
-                {renderContent(Library)}
-            </div>
-
-            <div className={config.currentPage === 'search' ? 'block h-full' : 'hidden'}>
-                {renderContent(Search)}
-            </div>
-
-            <div className={config.currentPage === 'browse' ? 'block h-full' : 'hidden'}>
-                {renderContent(Browse)}
-            </div>
-
-            <div className={config.currentPage === 'settings' ? 'block h-full' : 'hidden'}>
-                {renderContent(Settings)}
-            </div>
-        </div>
+    const CurrentComponent = getPageComponent(
+        config.currentPage,
+        config.pageRoutes[config.currentPage]?.route
     );
+
+    return <div className="relative w-full h-full">{CurrentComponent}</div>;
 }

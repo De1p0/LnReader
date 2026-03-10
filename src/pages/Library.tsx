@@ -1,50 +1,55 @@
 import { ArrowDownIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Book from "../components/shared/Book";
+import { useConfigStore } from "../stores/configStore";
+import { Manga, MangaDetail } from "../types/ExtensionData";
 
 export default function Library() {
-    // this is for test ONLY remove once library fn is fully implemented
-    // image src will be cached offline until 12hr update
     const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState("All")
+    const [filter, setFilter] = useState("All");
+    const [books, setBooks] = useState<Manga[]>([]);
+    const { config } = useConfigStore();
 
-    let library = [
+    // Static library as a fallback / seed
+    const library = [
         {
-            "name": "RuriDragon",
-            "imageUrl": "https://uploads.mangadex.org/covers/141609b6-cf86-4266-904c-6648f389cdc9/216d1ce9-2195-4ad3-9502-be95b06a3502.jpg",
-            "link": "/manga/141609b6-cf86-4266-904c-6648f389cdc9"
+            name: "RuriDragon",
+            imageUrl: "https://uploads.mangadex.org/covers/141609b6-cf86-4266-904c-6648f389cdc9/216d1ce9-2195-4ad3-9502-be95b06a3502.jpg",
+            link: "/manga/141609b6-cf86-4266-904c-6648f389cdc9",
+            source: "MangaDex"
+        }
+    ];
+
+    useEffect(() => {
+        async function fetchBooks() {
+            const bookDetails = await Promise.all(
+                library.map(async (book) => {
+                    const source = config.installedSources.find(
+                        s => s.source.name.toLowerCase() === book.source.toLowerCase()
+                    );
+                    if (source) {
+                        return { ...book, getDetail: source.getDetail.bind(source) };
+                    }
+                    return book;
+                })
+            ) as Manga[];
+
+            setBooks(bookDetails);
         }
 
-        // , {
-        //     name: "Ruri Dragon",
-        //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/2/24/RuriDragon_vol._1_cover.jpg",
-        //     currentChapter: 12,
-        //     maximumChapters: 12,
-        // }, {
-        //     name: "Kimi wa Yotsuba no Clover", 
-        //     imageSrc: "https://jpbookstore.com/cdn/shop/files/81NCqrHV51L._SL1500_1024x1024.jpg?v=1752505281",
-        //     currentChapter: 12,
-        //     maximumChapters: 333,
-        // }                        
-    ]
-        ;
+        fetchBooks();
+    }, [config.installedSources]);
 
     return (
         <div className="w-full h-full p-8">
-            {/* h-screen will break on webview */}
-
             <div className="flex items-center justify-between mb-5">
-                <h1 className="text-2xl font-bold text-primary-text tracking-tight">
-                    Library
-                </h1>
+                <h1 className="text-2xl font-bold text-primary-text tracking-tight">Library</h1>
                 <div className="relative">
                     <div
                         onClick={() => setOpen(!open)}
                         className="flex items-center gap-1 px-3 py-1 cursor-pointer hover:bg-white/5 rounded transition-colors"
                     >
-                        <span className="text-xs font-medium text-primary-text">
-                            {filter}
-                        </span>
+                        <span className="text-xs font-medium text-primary-text">{filter}</span>
                         <ChevronDownIcon
                             className={`w-3.5 h-3.5 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
                         />
@@ -52,50 +57,20 @@ export default function Library() {
 
                     {open && (
                         <>
-                            <div
-                                className="fixed inset-0 z-40"
-                                onClick={() => setOpen(false)}
-                            />
-
+                            <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
                             <div className="absolute top-full right-0 mt-1 w-48 bg-surface border border-primary-text/10 rounded shadow-2xl backdrop-blur-md z-50 py-1">
-                                <div
-                                    onClick={() => {
-                                        setFilter("All")
-                                        setOpen(false)
-                                    }}
-                                    className={`px-4 py-2 text-[11px] cursor-pointer transition-colors ${filter === "All"
-                                        ? "bg-primary-text/20 text-primary-text"
-                                        : "text-primary-text hover:bg-primary-text/10 hover:text-primary-text/80"
-                                        }`}
-                                >
-                                    All
-                                </div>
-
-                                <div
-                                    onClick={() => {
-                                        setFilter("PEAK")
-                                        setOpen(false)
-                                    }}
-                                    className={`px-4 py-2 text-[11px] cursor-pointer transition-colors ${filter === "PEAK"
-                                        ? "bg-primary-text/20 text-primary-text"
-                                        : "text-primary-text hover:bg-primary-text/10 hover:text-primary-text/80"
-                                        }`}
-                                >
-                                    PEAK
-                                </div>
-
-                                <div
-                                    onClick={() => {
-                                        setFilter("MID ASF")
-                                        setOpen(false)
-                                    }}
-                                    className={`px-4 py-2 text-[11px] cursor-pointer transition-colors ${filter === "MID ASF"
-                                        ? "bg-primary-text/20 text-primary-text"
-                                        : "text-primary-text hover:bg-primary-text/10 hover:text-primary-text/80"
-                                        }`}
-                                >
-                                    MID ASF
-                                </div>
+                                {["All", "PEAK", "MID ASF"].map((f) => (
+                                    <div
+                                        key={f}
+                                        onClick={() => { setFilter(f); setOpen(false); }}
+                                        className={`px-4 py-2 text-[11px] cursor-pointer transition-colors ${filter === f
+                                            ? "bg-primary-text/20 text-primary-text"
+                                            : "text-primary-text hover:bg-primary-text/10 hover:text-primary-text/80"
+                                            }`}
+                                    >
+                                        {f}
+                                    </div>
+                                ))}
                             </div>
                         </>
                     )}
@@ -103,12 +78,10 @@ export default function Library() {
             </div>
 
             <div className="overflow-y-auto flex flex-wrap gap-5 content-start">
-
-                {library.map((book, index) => (
-                    <Book book={book} />
+                {books.map((book, index) => (
+                    <Book key={index} book={book} />
                 ))}
             </div>
-
-        </div >
+        </div>
     );
 }

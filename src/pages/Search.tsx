@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Manga } from "../types/ExtensionData";
 import Book from "../components/shared/Book";
@@ -8,26 +8,92 @@ export default function Search() {
     const location = useLocation();
     const { config, setSearch } = useConfigStore();
     const { searchResults, searchQuery } = config;
-    console.log(searchResults)
+
+    const [expandedSources, setExpandedSources] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
         if (location.state?.results && location.state?.query) {
             setSearch(location.state.results, location.state.query);
         }
-    }, [location.state, setSearch]);
+    }, [location.state?.results, location.state?.query, setSearch]);
+
+    useEffect(() => {
+        setExpandedSources({});
+    }, [searchQuery, searchResults]);
+
+    const toggleExpand = (source: string) => {
+        setExpandedSources((prev) => ({
+            ...prev,
+            [source]: !prev[source],
+        }));
+    };
 
     return (
-        <div className="w-full h-full p-8 overflow-scroll">
-            <header className="mb-6">
-                <h1 className="text-2xl font-bold text-primary-text tracking-tight">
-                    Results for "{searchQuery}"
+        <div className="w-full h-full p-8 overflow-y-auto bg-background">
+            <header className="mb-10">
+                <h1 className="text-3xl font-black text-primary-text tracking-tight">
+                    Results for <span className="text-primary italic">"{searchQuery}"</span>
                 </h1>
             </header>
 
-            <div className="overflow-y-scroll flex flex-wrap gap-5 content-start">
-                {searchResults?.map((book: Manga) => (
-                    <Book key={book.name} book={book} />
-                ))}
+
+            <div key={searchQuery} className="flex flex-col gap-12">
+                {Object.keys(searchResults).map((source) => {
+                    const doExpand = expandedSources[source];
+                    const results = searchResults[source] || [];
+                    const doWrap = results.length > 5;
+
+                    return (
+                        <section key={source} className="flex flex-col gap-4">
+                            <div className="flex items-center gap-4">
+                                <h2 className="text-primary-text font-black text-xl whitespace-nowrap">
+                                    {source}
+                                </h2>
+                                <div className="h-px w-full bg-white/10" />
+                                <span className="text-sm text-primary-text/70 font-medium px-2 py-1 bg-white/5 rounded">
+                                    {results.length}
+                                </span>
+                            </div>
+
+                            <div className="relative group">
+                                <div
+                                    className={`relative flex flex-wrap gap-5 overflow-hidden transition-[max-height] duration-500 ease-in-out ${doExpand ? "max-h-none" : "max-h-80"
+                                        }`}
+                                >
+                                    {results.map((book: Manga) => (
+                                        <Book key={`${source}-${book.name}`} book={book} />
+                                    ))}
+
+                                    {!doExpand && doWrap && (
+                                        <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
+                                    )}
+                                </div>
+
+                                {doWrap && (
+                                    <div
+                                        className={`flex justify-center w-full mt-4 ${!doExpand ? "absolute -bottom-6 left-0 z-20" : ""
+                                            }`}
+                                    >
+                                        <button
+                                            className="px-8 py-2.5 bg-white/10 hover:bg-white/20 text-primary-text rounded-xl text-sm font-bold transition-all"
+                                            onClick={() => toggleExpand(source)}
+                                        >
+                                            {doExpand
+                                                ? "Show Less"
+                                                : `Show All from ${source}`}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    );
+                })}
+
+                {Object.keys(searchResults).length === 0 && (
+                    <div className="text-primary-text/50 py-20 text-center">
+                        No results found for this search.
+                    </div>
+                )}
             </div>
         </div>
     );

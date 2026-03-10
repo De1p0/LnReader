@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useConfigStore } from '../../stores/configStore';
 import { useNavigate } from 'react-router-dom';
+import { Manga } from '../../types/ExtensionData';
 
 export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
@@ -19,21 +20,30 @@ export default function TitleBar() {
      async function handleSearch() {
           if (!query.trim()) return;
 
-          let results: any[] = [];
-          const { config, setSearch, setConfig } = useConfigStore.getState();
+          let results: Record<string, Manga[]> = {};
+          const { config, setSearch, setConfig, setPageRoute } = useConfigStore.getState();
 
           for (const source of config.installedSources) {
                const res = await source.search(query, 1, []);
-               console.log(res.list)
+               console.log(res.list);
+
                if (res?.list) {
-                    results = [...results, ...res.list];
+                    const items = res.list.map(item => ({
+                         ...item,
+                         source: source.source.name,
+                         getDetail: source.getDetail.bind(source)
+                    }));
+
+
+                    results[source.source.name] = items;
+                    console.log(results);
                }
           }
           setSearch(results, query);
 
           setConfig("currentPage", "search");
+          setPageRoute("search", `/`);
 
-          navigate("/search");
      }
 
      useEffect(() => {

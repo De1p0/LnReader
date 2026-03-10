@@ -5,12 +5,21 @@ import { ArrowLeftCircleIcon, ArrowLeftIcon } from "@heroicons/react/24/outline"
 import { useConfigStore } from "../../stores/configStore";
 
 export default function BookDetailsPage() {
-    const location = useLocation();
     const { config, setPageRoute } = useConfigStore()
 
     const manga = config.pageRoutes[config.currentPage].state
 
-    console.log(config.pageRoutes[config.currentPage], config.currentPage)
+    useEffect(() => {
+        const getDetail = async () => {
+            let mangaDetail = await manga.getDetail(manga.link)
+            console.log(mangaDetail)
+
+        }
+        getDetail()
+    }, [])
+
+
+
 
     return (
         <div className="p-8 w-full h-full text-primary-text">
@@ -20,7 +29,11 @@ export default function BookDetailsPage() {
             >
                 <ArrowLeftIcon width={16} />
                 Back
+
             </button>
+
+
+
             <div className="flex gap-8 mt-4 ">
                 <img src={manga?.imageUrl} className="w-64 rounded-xl" />
                 <div>

@@ -2,9 +2,12 @@ import { loadSource } from "../ExtensionHandler/SourceLoader";
 import { useConfigStore } from "../stores/configStore";
 import { DefaultExtension, SourceResponse } from '../types/ExtensionData';
 import { corFetch } from "../coreFetch";
+import ExtensionsSettings from '../components/settings/ExtensionSettings';
 
 export default function Browse() {
     const { config, setConfig } = useConfigStore();
+
+
 
     const handleInstall = async (sourceItem: SourceResponse) => {
         const currentInstalled = config?.installedSourcesName ?? [];
@@ -22,7 +25,9 @@ export default function Browse() {
         const extensions = await Promise.all(
             updatedInstalled.map(async (source: SourceResponse) => {
                 const ExtensionClass = await loadSource(source.script);
-                return new ExtensionClass(corFetch);
+                let extension = new ExtensionClass(corFetch);
+
+                return extension
             })
         );
 

@@ -1,7 +1,21 @@
 import { fetch } from "@tauri-apps/plugin-http";
 
+function encodeUrl(url: string) {
+    const u = new URL(url);
+
+    const params = new URLSearchParams();
+    for (const [key, value] of u.searchParams.entries()) {
+        params.append(key, value);
+    }
+
+    u.search = params.toString();
+    return u.toString();
+}
+
 export const corFetch = (url: string, init: any = {}) => {
-    return fetch(url, {
+    const encodedUrl = encodeUrl(url);
+
+    return fetch(encodedUrl, {
         ...init,
         headers: {
             "User-Agent":

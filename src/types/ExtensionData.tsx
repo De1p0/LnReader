@@ -23,9 +23,11 @@ export interface Chapter {
 }
 
 export interface Manga {
+    getDetail: (url: string) => any;
     name: string;
     imageUrl: string;
     link: string;
+    source: string,
 }
 
 

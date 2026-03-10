@@ -3,16 +3,16 @@ import { Manga } from "../../types/ExtensionData";
 import { useConfigStore } from "../../stores/configStore";
 
 export default function Book({ book }: { book: Manga }) {
-    const { config, setPageRoute } = useConfigStore()
+    const { config, setPage } = useConfigStore()
+
 
 
     return (<div
 
 
         onClick={() => {
-            config.pageRoutes[config.currentPage].state = book;
-            setPageRoute(config.currentPage, `/books/${book.name}`);
-
+            // config.pageRoutes[config.currentPage].state = book;
+            setPage(config.currentPage, `/books/${book.name}`, book)
         }}
         className="group relative w-full max-w-50 aspect-2/3 rounded-xl overflow-hidden shadow-2xl transition-all hover:opacity-80"
     >
@@ -22,7 +22,6 @@ export default function Book({ book }: { book: Manga }) {
                 {book.maximumChapters - book.currentChapter}
             </span>
         )} */}
-
         < img
             src={book.imageUrl}
             className="w-full h-full object-cover"

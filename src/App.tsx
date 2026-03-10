@@ -3,16 +3,38 @@ import "./App.css";
 import TitleBar from "./components/layout/TitleBar";
 import Sidebar from "./components/layout/SideBar";
 import AppRoutes from "./routes/AppRoutes";
-import { applyTheme } from './stores/configStore';
+import { applyTheme, useConfigStore } from './stores/configStore';
 import "./ExtensionHandler/SourceLoader"
 import { getSourceList, loadSource } from "./ExtensionHandler/SourceLoader";
 import { useEffect } from "react";
+import { corFetch } from "./coreFetch";
+import { SourceResponse } from "./types/ExtensionData";
 
 
 function App() {
-  applyTheme("system"); // to prevent instant light mode as default
+  const { config, setConfig } = useConfigStore();
 
 
+  useEffect(() => {
+    applyTheme("system"); // to prevent instant light mode as default
+
+
+    const handleExtensionLoad = async () => {
+      const extensions = await Promise.all(
+        config.sources.map(async (source: SourceResponse) => {
+          const ExtensionClass = await loadSource(source.script);
+          let extension = new ExtensionClass(corFetch);
+
+          return extension
+        })
+      );
+
+      console.log(extensions, "Loading installed extensions: ", JSON.stringify(extensions));
+
+      setConfig("installedSources", extensions);
+    };
+    handleExtensionLoad()
+  }, [])
 
 
 
