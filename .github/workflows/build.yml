@@ -3,7 +3,12 @@ on:
   push:
     tags:
       - 'v*'
-
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release (e.g. v0.2.0)'
+        required: true
+        type: string
 jobs:
   publish-tauri:
     permissions:
