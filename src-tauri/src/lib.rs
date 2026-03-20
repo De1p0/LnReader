@@ -1,6 +1,6 @@
 use tauri::Manager;
 mod library;
-
+use library::initiate::{get_meta, save_cover, save_page, setup_manga};
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -10,16 +10,27 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_http::init())
         .setup(|app| {
-            if let Ok(app_data_path) = app.path().app_data_dir() {
-                library::initiate::initiate(&app_data_path);
-            }
-            // Use or store the path
+            let app_data_path = app
+                .path()
+                .app_data_dir()
+                .unwrap_or_else(|_| std::env::current_dir().unwrap());
+
+            let manager = library::initiate::MangaManager::new(app_data_path);
+
+            app.manage(manager);
+
             Ok(())
         })
-        .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_http::init()) // the plugin we need
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_meta,
+            save_cover,
+            save_page,
+            setup_manga
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -31,7 +31,7 @@ export default function Book({ book }: { book: Manga }) {
         <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
 
         <span
-            className={`absolute bottom-0 left-0 p-3 text-sm text-white font-semibold leading-tight drop-shadow-md wrap-break-words ${book.name.length > 30
+            className={`absolute bottom-0 left-0 p-3 text-sm text-white font-semibold leading-tight drop-shadow-md wrap-break-words ${book?.name?.length > 30
                 ? "max-w-full"
                 : "max-w-[75%]"
                 }`}

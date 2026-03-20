@@ -46,7 +46,7 @@ export default function Sidebar() {
                     <li className="border-b pb-2 border-white/10">
                         <button
                             type="button"
-                            onClick={() => setIsExpanded(!isExpanded)}
+                            onMouseUp={() => setIsExpanded(!isExpanded)}
                             className="flex h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3"
                             aria-label="Toggle Sidebar"
                         >
@@ -59,7 +59,7 @@ export default function Sidebar() {
                         return (
                             <li key={item.name}>
                                 <button
-                                    onClick={() => setConfig("currentPage", item.href as PageName)}
+                                    onMouseUp={() => setConfig("currentPage", item.href as PageName)}
                                     className={`flex w-full h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3 ${isActive ? "text-accent" : ""}`}
                                 >
                                     <item.icon className="w-5 h-5 shrink-0 text-copy-light" />
@@ -73,7 +73,7 @@ export default function Sidebar() {
 
                     <li className="pt-4 border-t border-white/10">
                         <button
-                            onClick={() => setConfig("currentPage", "settings")}
+                            onMouseUp={() => setConfig("currentPage", "settings")}
                             className={`flex h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3 ${config.currentPage === "settings" ? "text-accent" : ""}`}
                         >
                             <Cog6ToothIcon className="w-5 h-5 shrink-0 text-copy-light" />

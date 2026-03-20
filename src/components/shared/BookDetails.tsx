@@ -7,13 +7,15 @@ import { MangaDetail } from "../../types/ExtensionData";
 import ReactMarkdown from "react-markdown";
 import { useConfigStore } from "../../stores/configStore";
 import { fixBook } from "../../utils/fixBook";
+import { MangaManager } from "../../utils/MangaManager";
+import { getB64 } from "../../utils/common";
 
 export default function BookDetailsPage() {
     const { config, setPageRoute } = useConfigStore();
     const [mangaDetail, setMangaDetail] = useState({} as MangaDetail);
     const [descriptionExp, setDescExp] = useState(false);
     const [genreExp, setGenreExp] = useState(false);
-
+    const [coverImg, setCoverImg] = useState("");
     const description = mangaDetail.description || "";
     const manga = config.pageRoutes[config.currentPage].state;
 
@@ -32,6 +34,10 @@ export default function BookDetailsPage() {
                 } else {
                     setMangaDetail(fixedBook);
                 }
+            }
+
+            if (manga?.imageUrl) {
+                setCoverImg(await getB64(manga.imageUrl));
             }
         };
 
@@ -71,7 +77,10 @@ export default function BookDetailsPage() {
                             </button>
                         )}
                     </div>
-
+                    <button onClick={() => {
+                        MangaManager.setup(manga?.name, mangaDetail.description, mangaDetail.genre)
+                        MangaManager.saveCover(manga?.name, coverImg);
+                    }}> fuck you </button>
                     <div className="mt-6 max-w-3xl">
                         <div className={`text-md leading-relaxed text-primary-text/60 ${descriptionExp ? "" : "line-clamp-3"}`}>
                             <ReactMarkdown
@@ -94,6 +103,10 @@ export default function BookDetailsPage() {
                                 {descriptionExp ? "Read less" : "Read full description"}
                             </button>
                         )}
+
+
+
+
                     </div>
 
                     <hr className="my-8 border-primary-text/5" />
@@ -106,7 +119,11 @@ export default function BookDetailsPage() {
                                     key={index}
                                     className="group flex items-center justify-between p-4 border-b border-primary-text/5 hover:bg-surface transition-all cursor-pointer active:bg-primary-text/10"
                                 >
-                                    <span className="font-medium text-primary-text/70 transition-all duration-200 flex flex-col">
+                                    <span onClick={() => {
+                                        console.log(manga?.getPageList(chapter.url))
+                                        // MangaManager.savePage(manga?.name, chapter.name, 1, "")
+                                    }}
+                                        className="font-medium text-primary-text/70 transition-all duration-200 flex flex-col">
                                         {chapter.name}
                                         <span className="text-sm text-primary-text/50 transition-all duration-200">
                                             {`${(() => {
