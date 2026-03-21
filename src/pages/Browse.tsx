@@ -7,12 +7,8 @@ import { useConfigStore } from "../stores/configStore";
 export default function Browse() {
     const { config, setConfig } = useConfigStore();
 
-
-
     const handleInstall = async (sourceItem: SourceResponse) => {
         const currentInstalled = config?.installedSourcesName ?? [];
-
-
 
         const updatedInstalled = currentInstalled.some(
             s => s.script === sourceItem.script
@@ -26,37 +22,35 @@ export default function Browse() {
             updatedInstalled.map(async (source: SourceResponse) => {
                 const ExtensionClass = await loadSource(source.script);
                 let extension = new ExtensionClass(corFetch);
-
-                return extension
+                return extension;
             })
         );
 
-        console.log(extensions, "fuhh");
-
         setConfig("installedSources", extensions);
     };
+
     return (
-        <div className="w-full h-full p-8">
-            <header className="mb-6">
-                <h1 className="text-2xl font-bold text-primary-text tracking-tight">
+        <div className="w-full h-full p-4 sm:p-8 overflow-hidden">
+            <header className="mb-4 sm:mb-6">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary-text tracking-tight">
                     Sources
                 </h1>
             </header>
 
-            <div className="flex flex-row gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x">
+            <div className={`flex flex-row gap-3 pb-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory w-full px-4 sm:px-0 box-border flex-wrap`}>
                 {config?.sources?.map((source, index) => (
                     <div
                         key={source.id || index}
-                        className="flex flex-col gap-4 p-4 rounded-xl bg-secondary-bg/30 border border-primary-text/10 shrink-0 w-64 snap-start transition-all"
+                        className="flex flex-col gap-3 p-3 sm:p-4 rounded-xl bg-secondary-bg/30 border border-primary-text/10 shrink-0 w-56 sm:w-64 snap-start transition-all"
                     >
-                        <div className="flex items-center gap-4">
-                            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-surface">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-lg bg-surface">
                                 <img
                                     src={source.cover}
                                     alt={source.id}
                                     className="h-full w-full object-cover"
                                 />
-                                <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg" />
+                                <div className="absolute inset-0 ring-1 ring-inset rounded-lg" />
                             </div>
 
                             <div className="flex flex-col min-w-0 flex-1">
@@ -65,9 +59,6 @@ export default function Browse() {
                                 </span>
                                 <div className="flex items-center gap-1.5 mt-0.5">
                                     <span className="text-[10px] font-bold text-primary-text/30 uppercase tracking-tighter bg-primary-text/5 px-1.5 py-0.5 rounded">
-                                        {/* EN */}
-
-
                                         LANG
                                     </span>
                                     <span className="text-[11px] text-primary-text/40 font-medium">
@@ -78,10 +69,11 @@ export default function Browse() {
                         </div>
 
                         <button
-                            onClick={(e) => {
-                                handleInstall(source)
-                            }}
-                            className={`w-full py-2 px-4 rounded-lg ${config.installedSourcesName.some(s => s.id == source.id) ? "bg-primary-text/80" : "bg-primary-text/90"} text-surface/80 text-xs font-bold transition-opacity cursor-pointer`}
+                            onClick={() => handleInstall(source)}
+                            className={`w-full py-2 px-4 rounded-lg touch-manipulation active:opacity-70 ${config.installedSourcesName.some(s => s.id == source.id)
+                                ? "bg-primary-text/80"
+                                : "bg-primary-text/90"
+                                } text-surface/80 text-xs font-bold transition-opacity cursor-pointer`}
                         >
                             {config.installedSourcesName.some(s => s.id == source.id) ? "Installed" : "Install"}
                         </button>

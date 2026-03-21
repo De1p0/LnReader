@@ -8,14 +8,10 @@ import {
     ArrowDownOnSquareStackIcon,
     GlobeAltIcon
 } from "@heroicons/react/24/outline";
-import { NavLink, useLocation } from "react-router-dom";
 import { useConfigStore } from "../../stores/configStore";
 
-
-// browse might not be implemented 
 const MENU_ITEMS = [
     { name: "Library", icon: BookmarkIcon, href: "library" },
-    { name: "Downloads", icon: ArrowDownOnSquareStackIcon, href: "downloads" },
     { name: "Browse", icon: GlobeAltIcon, href: "browse" },
     { name: "History", icon: ClockIcon, href: "history" },
     { name: "Search", icon: MagnifyingGlassIcon, href: "search" },
@@ -26,8 +22,32 @@ export default function Sidebar() {
     const sidebarRef = useRef<HTMLElement>(null);
     const { config, setConfig } = useConfigStore();
 
-    const location = useLocation();
-
+    if (config.isMobile) {
+        return (
+            <nav className="fixed bottom-0 left-0 right-0 h-14 bg-surface border-t border-white/10 z-40 flex items-center justify-around px-2">
+                {MENU_ITEMS.map((item) => {
+                    const isActive = config.currentPage === item.href;
+                    return (
+                        <button
+                            key={item.name}
+                            onMouseUp={() => setConfig("currentPage", item.href as PageName)}
+                            className={`flex flex-col items-center justify-center gap-0.5 w-12 h-12 rounded-md ${isActive ? "text-accent" : "text-copy-light"}`}
+                        >
+                            <item.icon className="w-5 h-5 shrink-0" />
+                            <span className="text-[10px] whitespace-nowrap">{item.name}</span>
+                        </button>
+                    );
+                })}
+                <button
+                    onMouseUp={() => setConfig("currentPage", "settings")}
+                    className={`flex flex-col items-center justify-center gap-0.5 w-12 h-12 rounded-md ${config.currentPage === "settings" ? "text-accent" : "text-copy-light"}`}
+                >
+                    <Cog6ToothIcon className="w-5 h-5 shrink-0" />
+                    <span className="text-[10px]">Settings</span>
+                </button>
+            </nav>
+        );
+    }
 
     return (
         <aside
@@ -38,8 +58,8 @@ export default function Sidebar() {
                     setIsExpanded(false);
                 }
             }}
-            className={`h-full p-2 pt-0 text-copy overflow-hidden transition-all duration-300 ease-in-out bg-surface sidebar
-              ${isExpanded ? "w-64 z-40" : "w-13 z-20 "} absolute left-0 top-0`}
+            className={`p-2 pt-0 text-copy overflow-hidden transition-all duration-300 ease-in-out bg-surface sidebar absolute left-0 top-0 h-full
+                ${isExpanded ? "w-64 z-40" : "w-13 z-20"}`}
         >
             <nav className="flex flex-col h-full mt-1">
                 <ul className="space-y-2 flex flex-col h-full">
@@ -82,6 +102,6 @@ export default function Sidebar() {
                     </li>
                 </ul>
             </nav>
-        </aside >
+        </aside>
     );
 }

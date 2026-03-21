@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Manga } from '../../types/ExtensionData';
 import { useConfigStore } from '../../stores/configStore';
+import Searchbar from './SearchBar';
 
 export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
@@ -79,22 +80,7 @@ export default function TitleBar() {
 
 
                <div className="flex-1 flex"></div>
-
-               <div className="w-full max-w-md px-4">
-                    <div className="relative group w-full">
-                         <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
-                              <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-accent/50 transition-colors" onClick={() => handleSearch()} />
-                         </div>
-                         <input
-                              type="text"
-                              value={query}
-                              onChange={(e) => setQuery(e.target.value)}
-                              onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
-                              placeholder="Search manga..."
-                              className="w-full bg-background border border-white/5 text-xs text-primary-text rounded py-1 pl-7 pr-2 focus:outline-none focus:bg-background/90 focus:border-accent/90 transition-all"
-                         />
-                    </div>
-               </div>
+               <Searchbar layer="surface" />
 
                <div className="flex-1 flex"></div>
 

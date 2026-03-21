@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Manga } from "../types/ExtensionData";
 import Book from "../components/shared/Book";
 import { useConfigStore } from "../stores/configStore";
+import Searchbar from "../components/layout/SearchBar";
 
 export default function Search() {
     const location = useLocation();
@@ -28,17 +29,25 @@ export default function Search() {
         }));
     };
 
+    console.log(searchResults)
+
     return (
         <div className="w-full h-full p-8 overflow-y-auto bg-background">
             <header className="mb-10">
                 <h1 className="text-3xl font-black text-primary-text tracking-tight">
-                    Results for <span className="text-primary italic">"{searchQuery}"</span>
+                    {searchQuery ? "Results for" : "Search"}{" "}
+                    <span className="text-primary italic">
+                        {searchQuery ? `“${searchQuery}”` : ""}
+                    </span>
+
+
                 </h1>
             </header>
+            {config.isMobile && <Searchbar layer="background" />}
 
 
             <div key={searchQuery} className="flex flex-col gap-12">
-                {Object.keys(searchResults).map((source) => {
+                {Object.values(searchResults).flat().length !== 0 && Object.keys(searchResults).map((source) => {
                     const doExpand = expandedSources[source];
                     const results = searchResults[source] || [];
                     const doWrap = results.length > 5;
@@ -89,7 +98,7 @@ export default function Search() {
                     );
                 })}
 
-                {Object.keys(searchResults).length === 0 && (
+                {Object.values(searchResults).flat().length === 0 && (
                     <div className="text-primary-text/50 py-20 text-center">
                         No results found for this search.
                     </div>

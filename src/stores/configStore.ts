@@ -2,6 +2,10 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { DefaultExtension, SourceResponse, Manga } from '../types/ExtensionData';
 import { ThemeName, THEMES } from './themes/themes';
+import { platform } from '@tauri-apps/plugin-os';
+
+const current_platform: string = platform()
+const isMobile = current_platform === "ios" || current_platform === "android";
 
 export interface AppConfig {
     theme: ThemeName;
@@ -10,6 +14,7 @@ export interface AppConfig {
     installedSourcesName: SourceResponse[];
     installedSources: DefaultExtension[];
     currentPage: PageName;
+    isMobile: boolean;
     pageRoutes: {
         library: {
             route: string;
@@ -46,6 +51,7 @@ export const useConfigStore = create<ConfigStore>()(
     persist(
         (set) => ({
             config: {
+                isMobile: isMobile,
                 theme: 'system',
                 sources: [],
                 pageRoutes: {

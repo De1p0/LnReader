@@ -14,48 +14,37 @@ import { applyTheme, useConfigStore } from "./stores/configStore";
 function App() {
   const { config, setConfig } = useConfigStore();
 
-
   useEffect(() => {
-    applyTheme(config.theme); // to prevent instant light mode as default
+    setConfig("isMobile", true); // this is for debug only, please remove on official release
 
+    applyTheme(config.theme);
 
     const handleExtensionLoad = async () => {
       const extensions = await Promise.all(
-        config.sources.map(async (source: SourceResponse) => {
+        config.sources.map(async (source) => {
           const ExtensionClass = await loadSource(source.script);
-          let extension = new ExtensionClass(corFetch);
-
-          return extension
+          return new ExtensionClass(corFetch);
         })
       );
 
-      console.log(extensions, "Loading installed extensions: ", JSON.stringify(extensions));
-
       setConfig("installedSources", extensions);
     };
-    handleExtensionLoad()
-  }, [])
 
-
+    handleExtensionLoad();
+  }, []);
 
   return (
-
     <div className="w-screen h-screen flex flex-row overflow-hidden relative bg-surface">
-      <Sidebar />
+      {!config.isMobile && <Sidebar />}
 
-
-      <div className="flex-1 flex flex-col bg-surface ml-13">
-
-        <TitleBar />
-
-        <main className="flex-1 bg-background rounded-tl-2xl text-black overflow-scroll scrollbar-hide">
-          {/* this is for SPA, redirecting to pages ruins UX */}
+      <div className={`flex-1 flex flex-col bg-surface overflow-hidden ${!config.isMobile && "ml-13"}`}>
+        {!config.isMobile && <TitleBar />}
+        <main className={`flex-1 bg-background ${!config.isMobile && "rounded-tl-2xl"} text-black overflow-y-scroll scrollbar-hide overflow-x-hidden`}>
           <AppRoutes />
         </main>
-
+        {config.isMobile && <Sidebar />}
       </div>
     </div>
   );
 }
-
 export default App;

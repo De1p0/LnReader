@@ -1,0 +1,56 @@
+import { useState } from "react";
+import { useConfigStore } from "../../stores/configStore";
+import { Manga } from "../../types/ExtensionData";
+import { ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+
+export default function Searchbar({ layer = "background" }: { layer: string }) {
+    const [query, setQuery] = useState("");
+    const { config, setPageRoute } = useConfigStore();
+
+    async function handleSearch() {
+        if (!query.trim()) return;
+
+        let results: Record<string, Manga[]> = {};
+        const { config, setSearch, setConfig, setPageRoute } = useConfigStore.getState();
+
+        for (const source of config.installedSources) {
+            const res = await source.search(query, 1, []);
+
+            if (res?.list) {
+                const items = res.list.map(item => ({
+                    ...item,
+                    source: source.source.name,
+                    getDetail: source.getDetail.bind(source)
+                }));
+
+
+                results[source.source.name] = items;
+            }
+        }
+        setSearch(results, query);
+
+        setConfig("currentPage", "search");
+        setPageRoute("search", `/`);
+
+    }
+
+    return (
+
+
+        <div className={`w-full max-w-md`} >
+            <div className="relative group w-full">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
+                    <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-accent/50 transition-colors" onClick={() => handleSearch()} />
+                </div>
+                <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
+                    placeholder="Search manga..."
+                    className="w-full bg-background border border-white/5 text-xs text-primary-text rounded py-1 pl-7 pr-2 focus:outline-none focus:bg-background/90 focus:border-accent/90 transition-all"
+                />
+            </div>
+        </div >
+    )
+}
