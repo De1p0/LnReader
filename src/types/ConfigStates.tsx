@@ -12,6 +12,3 @@ interface ConfigState {
     };
 }
 
-interface BookDetailsProps {
-    id: string;
-}

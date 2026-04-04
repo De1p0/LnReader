@@ -6,7 +6,7 @@ import { THEME_NAMES } from "../../stores/themes/themes";
 import { useConfigStore } from "../../stores/configStore";
 
 export default function AppearanceSettings() {
-    const { config, setConfig } = useConfigStore();
+    const { config, setConfig, setLayoutKey } = useConfigStore();
 
     return (
         <div className="p-4 bg-surface border border-primary-text/10 rounded relative">
@@ -26,6 +26,10 @@ export default function AppearanceSettings() {
                 />
                 {/* <ToggleButton /> */}
 
+                <ToggleButton label="Double Panel" description="Two panels instead of one per page" onChange={(val) => {
+                    setLayoutKey("doublePanel", val);
+                    console.log(config.layout)
+                }} checked={config.layout.doublePanel} />
 
             </div>
         </div>

@@ -7,7 +7,7 @@ import { getB64 } from "../../utils/common";
 import { MangaDetail } from "../../types/ExtensionData";
 
 export default function BookDetailsPage() {
-    const { config, setPageRoute } = useConfigStore();
+    const { config, setPageRoute, setPage } = useConfigStore();
     const [mangaDetail, setMangaDetail] = useState({} as MangaDetail);
     const [descriptionExp, setDescExp] = useState(false);
     const [genreExp, setGenreExp] = useState(false);
@@ -50,7 +50,7 @@ export default function BookDetailsPage() {
                     <img
                         src={manga?.imageUrl}
                         alt={manga?.name}
-                        className="w-44 sm:w-72 object-cover aspect-2/3 rounded-xl shadow-lg"
+                        className="w-44 sm:w-72 object-cover aspect-2/3 rounded-xl"
                     />
                 </div>
 
@@ -79,15 +79,15 @@ export default function BookDetailsPage() {
                         )}
                     </div>
 
-                    <button
+                    {/* <button
                         onClick={() => {
-                            MangaManager.setup(manga?.name, mangaDetail.description, mangaDetail.genre);
+                            MangaManager.add(manga?.name, mangaDetail.description, mangaDetail.genre);
                             MangaManager.saveCover(manga?.name, coverImg);
                         }}
-                        className="hidden"
+                        className=""
                     >
                         fuck you
-                    </button>
+                    </button> */}
 
                     <div className="mt-5 sm:mt-6 max-w-3xl">
                         <div className={`text-sm sm:text-md leading-relaxed text-primary-text/60 ${descriptionExp ? "" : "line-clamp-3"}`}>
@@ -121,7 +121,11 @@ export default function BookDetailsPage() {
                             {mangaDetail.chapters?.map((chapter, index) => (
                                 <div
                                     key={index}
-                                    className="group flex items-center justify-between py-4 px-2 sm:p-4 border-b border-primary-text/5 hover:bg-surface active:bg-primary-text/10 transition-all cursor-pointer"
+                                    onClick={() => {
+                                        setPage(config.currentPage, `/read/`, { chapter, manga })
+                                        console.log({ chapter, manga });
+                                    }}
+                                    className="group flex items-center justify-between py-4 px-2 sm:p-4 border-b border-primary-text/5 hover:bg-surface active:bg-surface transition-all cursor-pointer"
                                 >
                                     <span
                                         onClick={() => {

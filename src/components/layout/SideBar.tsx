@@ -12,14 +12,14 @@ import { useConfigStore } from "../../stores/configStore";
 const MENU_ITEMS = [
     { name: "Library", icon: BookmarkIcon, href: "library" },
     { name: "Browse", icon: GlobeAltIcon, href: "browse" },
-    { name: "History", icon: ClockIcon, href: "history" },
+    // { name: "History", icon: ClockIcon, href: "history" }, // history is boribngg who even uses this
     { name: "Search", icon: MagnifyingGlassIcon, href: "search" },
 ];
 
 export default function Sidebar() {
     const [isExpanded, setIsExpanded] = useState(false);
     const sidebarRef = useRef<HTMLElement>(null);
-    const { config, setConfig } = useConfigStore();
+    const { config, setConfig, setPage } = useConfigStore();
 
     if (config.isMobile) {
         return (
@@ -81,7 +81,12 @@ export default function Sidebar() {
                         return (
                             <li key={item.name}>
                                 <button
-                                    onMouseUp={() => setConfig("currentPage", item.href as PageName)}
+                                    onMouseUp={() => {
+                                        // if its already selected we go back to home page + (IMPROVES UX)
+                                        if (isActive)
+                                            setPage(config.currentPage, "", {})
+                                        setConfig("currentPage", item.href as PageName)
+                                    }}
                                     className={`flex w-full h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3 ${isActive ? "text-accent" : ""}`}
                                 >
                                     <item.icon className="w-5 h-5 shrink-0 text-copy-light" />

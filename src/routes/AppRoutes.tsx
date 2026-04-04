@@ -5,6 +5,12 @@ import Library from "../pages/Library";
 import Search from "../pages/Search";
 import Settings from "../pages/Settings";
 import { useConfigStore } from "../stores/configStore";
+import PageViewer from "../components/shared/reader/pageViewer";
+
+const sharedRoutes = [
+    { pattern: /\/books\//, component: <BookDetailsPage /> },
+    { pattern: /\/read\//, component: <PageViewer /> },
+]
 
 const pageRegistry: Record<
     string,
@@ -15,15 +21,11 @@ const pageRegistry: Record<
 > = {
     library: {
         default: <Library />,
-        routeOverrides: [
-            { pattern: /\/books\//, component: <BookDetailsPage /> },
-        ],
+        routeOverrides: sharedRoutes,
     },
     search: {
         default: <Search />,
-        routeOverrides: [
-            { pattern: /\/books\//, component: <BookDetailsPage /> },
-        ],
+        routeOverrides: sharedRoutes,
     },
     browse: { default: <Browse /> },
     settings: { default: <Settings /> },

@@ -2,9 +2,9 @@ import { useState } from "react";
 import AppearanceSettings from "../components/settings/AppearanceSettings";
 import DownloadsSettings from "../components/settings/DownloadSettings";
 import ExtensionsSettings from "../components/settings/ExtensionSettings";
+import ToggleButton from "../components/shared/ToggleButton";
 
 export default function Settings() {
-    const [extensionCode, setExtensionCode] = useState("");
     return (
         <div className="w-full h-screen p-6 bg-background text-primary-text flex flex-col gap-6 overflow-auto">
             <h1 className="text-xl font-semibold">Settings</h1>
@@ -15,4 +15,4 @@ export default function Settings() {
             </div>
         </div>
     );
-}    
+}         

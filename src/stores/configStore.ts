@@ -8,6 +8,9 @@ const current_platform: string = platform()
 const isMobile = current_platform === "ios" || current_platform === "android";
 
 export interface AppConfig {
+    layout: {
+        doublePanel: boolean;
+    };
     theme: ThemeName;
     sources: SourceResponse[];
     sourceList: string;
@@ -40,17 +43,23 @@ export interface AppConfig {
 interface ConfigStore {
     config: AppConfig;
     setConfig: <K extends keyof AppConfig>(key: K, value: AppConfig[K]) => void;
+    setLayoutKey: <K extends keyof AppConfig['layout']>(
+        key: K,
+        value: AppConfig['layout'][K]
+    ) => void;
     setPageRoute: (page: keyof AppConfig['pageRoutes'], path: string) => void;
     setSearch: (results: { [key: string]: Manga[] }, query: string) => void;
     setPageState: (page: keyof AppConfig['pageRoutes'], state: any) => void;
     setPage: (page: keyof AppConfig['pageRoutes'], path: string, state: any) => void;
     clearSearch: () => void;
 }
-
 export const useConfigStore = create<ConfigStore>()(
     persist(
         (set) => ({
             config: {
+                layout: {
+                    doublePanel: !isMobile,
+                },
                 isMobile: isMobile,
                 theme: 'system',
                 sources: [],
@@ -78,6 +87,17 @@ export const useConfigStore = create<ConfigStore>()(
                 installedSourcesName: [],
                 searchResults: {},
                 searchQuery: "",
+            },
+            setLayoutKey: (key, value) => {
+                set((state) => ({
+                    config: {
+                        ...state.config,
+                        layout: {
+                            ...state.config.layout,
+                            [key]: value,
+                        },
+                    },
+                }));
             },
             setConfig: (key, value) => {
                 set((state) => ({

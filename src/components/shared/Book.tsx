@@ -12,7 +12,7 @@ export default function Book({ book }: { book: Manga }) {
 
         onClick={() => {
             // config.pageRoutes[config.currentPage].state = book;
-            setPage(config.currentPage, `/books/${book.name}`, book)
+            setPage(config.currentPage, `/books/`, book)
         }}
         className="group relative w-full max-w-50 aspect-2/3 rounded-xl overflow-hidden shadow-2xl transition-all hover:opacity-80"
     >

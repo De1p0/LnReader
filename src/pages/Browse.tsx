@@ -50,7 +50,7 @@ export default function Browse() {
                                     alt={source.id}
                                     className="h-full w-full object-cover"
                                 />
-                                <div className="absolute inset-0 ring-1 ring-inset rounded-lg" />
+                                <div className="absolute inset-0 rounded-lg" />
                             </div>
 
                             <div className="flex flex-col min-w-0 flex-1">
