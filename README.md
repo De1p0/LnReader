@@ -1,32 +1,30 @@
 # Urayomi
-An open source manga reader that supports EVERY device and os.
+**Urayomi** is an open-source manga reader that supports every device, from desktop to mobile.  
 
-![showcase](showcase/showcase.png)
+## Showcase
+![Showcase Page](showcase/page.png)  
+![Reading Mode](showcase/reading.png)  
 
+## Available Platforms
 
+| OS       | Current Status                                | Working? |
+|----------|-----------------------------------------------|----------|
+| **Windows** | Fully supported with all features.           | ✅ Yes   |
+| **macOS**   | Fully supported with all features.           | ✅ Yes   |
+| **Linux**   | Fully supported with all features.           | ✅ Yes   |
+| **Android** | Fully supported with all features.           | ✅ Yes   |
+| **iOS**     | Fully supported with all features.           | ✅ Yes   |
 
-This readme is irrelevant, ignore it until i decide to actually make a readme
-pleaz star this i need the fame
-
-
-
-## Status
-Currently, **only searching is working**.  
-
-## TODO
-
-Implementing saving to library either with sqlite or json, 
-Implementing actual manga chapter reading duhh
+## Versioning
+Versions below **v0.5.4** may have unexpected **(theyre very expected)** bugs, like forcing mobile mode on desktop (oops).  
 
 ## Sources
-You can find all sources here: [Urayomi-Extensions Github](https://github.com/De1p0/Urayomi-Extensions)
+extensions are available here: [Urayomi-Extensions GitHub](https://github.com/De1p0/Urayomi-Extensions)  
 
 ## Credits
-
-This projectt was inspired heavily by mangayomi and aidoku
-
+This project was inspired by:  
+- [Mangayomi](https://github.com/kodjodevf/mangayomi)  
+- [Aidoku](https://github.com/Aidoku/Aidoku)  
 
 ## Stats
-<img src="https://count.getloli.com/@urayomi?name=urayomi&theme=original-old" alt="Visitor Count" />
-
-
+<img src="https://count.getloli.com/@urayomi?name=urayomi&theme=original-old" alt="Visitor Count" />  
