@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useConfigStore } from '../../stores/configStore';
 import Searchbar from './SearchBar';
+import NavBarRoutes from "../../routes/NavBarRoutes";
 
 export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
@@ -53,7 +54,9 @@ export default function TitleBar() {
                </div>
 
                <div className="flex-1 flex"></div>
-               <Searchbar layer="surface" />
+               {/* <Searchbar layer="surface" />
+                */}
+               <NavBarRoutes />
                <div className="flex-1 flex"></div>
 
                <div className="flex h-full">

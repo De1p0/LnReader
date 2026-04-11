@@ -142,12 +142,17 @@ export default function BookDetailsPage() {
                                             const page = config.pageRoutes[config.currentPage];
 
                                             if (page.pageMangaState.chapter) {
-                                                page.pageMangaState.chapter.currentPage = 0;
                                                 page.pageMangaState.manga = manga;
                                                 page.pageMangaState.chapter.currentChapter = chapter;
 
 
                                             }
+                                        })
+                                        updateConfig((config) => {
+                                            const pageState =
+                                                config.pageRoutes[config.currentPage].pageMangaState;
+                                            pageState.currentPage = 0;
+
                                         })
                                         console.log({ chapter, manga });
                                     }}

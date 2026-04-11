@@ -11,7 +11,7 @@ export default function PageViewer() {
 
     const state = config.pageRoutes[config.currentPage].pageMangaState;
 
-    const page = state?.currentPage || 0;
+    const page = state.currentPage || 0;
 
     const chapter = state?.chapter?.currentChapter;
     const manga = state?.manga;
@@ -29,6 +29,7 @@ export default function PageViewer() {
 
     useEffect(() => {
         if (!chapter || !manga || !sources || Object.keys(sources).length === 0) return;
+
 
         const getPages = async () => {
             const source = Object.values(sources).find(
@@ -152,9 +153,12 @@ export default function PageViewer() {
     const nextPageImg = pages[page + 1] || "";
 
     return (
-        <div className="w-full h-full overflow-hidden flex flex-col bg-background">
+        <div className="w-full h-full relative overflow-hidden flex flex-col bg-background">
+
+
             <div className="flex flex-1 bg-surface overflow-auto">
                 <div
+
                     className={`flex flex-1 gap-2 ${config.layout.rightToLeft ? "flex-row-reverse" : ""
                         } sm:gap-4 p-4 sm:p-8 items-center justify-center overflow-hidden bg-background rounded-bl-2xl ${isLoaded ? "cursor-pointer" : "pointer-events-none opacity-50"
                         }`}

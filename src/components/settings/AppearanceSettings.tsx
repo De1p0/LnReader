@@ -5,7 +5,7 @@ import { THEME_NAMES } from "../../stores/themes/themes";
 import { useConfigStore } from "../../stores/configStore";
 
 export default function AppearanceSettings() {
-    const { config, updateConfig } = useConfigStore();
+    const { config, updateConfig, setTheme } = useConfigStore();
 
     return (
         <div className="p-4 bg-surface border border-primary-text/10 rounded relative">
@@ -22,9 +22,7 @@ export default function AppearanceSettings() {
                     value={config.theme}
                     options={THEME_NAMES}
                     onChange={(val) =>
-                        updateConfig((config) => {
-                            config.theme = val;
-                        })
+                        setTheme(val)
                     }
                 />
 
